@@ -25,6 +25,27 @@ class ViewController: UIViewController {
         let location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let region: MKCoordinateRegion = MKCoordinateRegion(center: location, span: span)
         map.setRegion(region, animated: true)
+        
+        let annotation = MKPointAnnotation()
+        annotation.title = "Hollywood sign"
+        annotation.subtitle = "Maybe I will go there one more time"
+        annotation.coordinate = location
+        map.addAnnotation(annotation)
+        
+        let uiGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longpress(gestureRecognizer:)))
+        uiGestureRecognizer.minimumPressDuration = 2
+        map.addGestureRecognizer(uiGestureRecognizer)
+        
+    }
+    
+    @objc func longpress(gestureRecognizer: UIGestureRecognizer) {
+        let touchPoint = gestureRecognizer.location(in: self.map)
+        let coordinate = map.convert(touchPoint, toCoordinateFrom: self.map)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "New place"
+        annotation.subtitle = "Maybe I'll go here too"
+        map.addAnnotation(annotation)
     }
 
     override func didReceiveMemoryWarning() {
